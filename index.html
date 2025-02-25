@@ -8,24 +8,40 @@
     content="width=device-width, initial-scale=1.0"
   >
   <link
-    href="./styles.css"
-    type="stylesheet"
+    rel="preconnect"
+    href="https://fonts.googleapis.com"
+  >
+  <link
+    rel="preconnect"
+    href="https://fonts.gstatic.com"
+    crossorigin
+  >
+  <link
+    href="https://fonts.googleapis.com/css2?family=Afacad+Flux:wght@100..1000&family=DM+Sans:ital,opsz,wght@0,9..40,100..1000;1,9..40,100..1000&family=Jost:ital,wght@0,100..900;1,100..900&family=Merienda:wght@300..900&family=Montserrat:ital,wght@0,100..900;1,100..900&display=swap"
+    rel="stylesheet"
+  >
+  <link
+    href="styles.css"
+    rel="stylesheet"
   >
   <script
     defer
-    src="./script.js"
-    type="text/javascript"
+    src="script.js"
   ></script>
+
   <title>js-project-recipe-library</title>
+
 </head>
 
 <body>
+  <!--a header-->
   <header>
     <h1>
       Recipe Library
     </h1>
   </header>
 
+  <!--section is form all forms-->
   <section class="form-holder">
     <form>
       <div>
@@ -39,58 +55,28 @@
           id="name"
           name="name"
           value="name"
+          class="button-style-first"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-first"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-first"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
-        >
-      </div>
-    </form>
-
-    <form>
-      <div>
-        <h2>
-          Sorting Class
-        </h2>
-      </div>
-      <div>
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
+          class="button-style-first"
         >
       </div>
     </form>
@@ -107,24 +93,66 @@
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
+        >
+      </div>
+    </form>
+
+    <form>
+      <div>
+        <h2>
+          Sorting Class
+        </h2>
+      </div>
+      <div>
+        <input
+          type="button"
+          id="name"
+          name="name"
+          value="name"
+          class="button-style-first"
+        >
+        <input
+          type="button"
+          id="name"
+          name="name"
+          value="name"
+          class="button-style-first"
+        >
+        <input
+          type="button"
+          id="name"
+          name="name"
+          value="name"
+          class="button-style-first"
+        >
+        <input
+          type="button"
+          id="name"
+          name="name"
+          value="name"
+          class="button-style-first"
         >
       </div>
     </form>
@@ -140,24 +168,28 @@
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
         <input
           type="button"
           id="name"
           name="name"
           value="name"
+          class="button-style-second"
         >
       </div>
     </form>
@@ -165,7 +197,7 @@
 
   <main>
     <!--each recipe is a "section"-->
-    <section class="card">
+    <section class="card-holder">
       <picture>
         <img>
       </picture>
@@ -174,7 +206,7 @@
           recipe
         </h2>
       </figcaption>
-      <article>
+      <article class="middle-text">
         <h3>
           some text
         </h3>

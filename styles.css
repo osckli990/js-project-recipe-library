@@ -1,15 +1,77 @@
-* {}
+body {
+  font-family: "Jost";
+  font-style: normal;
+  font-optical-sizing: none;
+  padding: 20px 40px 0px 40px;
+}
 
-body {}
+h1 {
+  color: #0018A4;
+}
 
-header {}
+.form-holder {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
 
-h1 {}
+h2 {
+  font-size: 18px;
+}
 
-.formholder {}
+input[type=button] {
+  border: none;
+  color: white;
+  padding: 10px 20px;
+  text-decoration: none;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 25px;
+}
 
-.card {}
+.button-style-first {
+  background-color: #87f8b8;
+}
 
-.card:active {}
+.button-style-first:hover {
+  border: 1px solid #0018A4;
+}
 
-.card:hover {}
+.button-style-first:active {
+  background-color: #0018A4;
+
+}
+
+.button-style-second {
+  background-color: #f59bb0;
+}
+
+.button-style-second:hover {
+  border: 1px solid #f55a7e;
+
+}
+
+.button-style-second:active {
+  background-color: #f55a7e;
+
+}
+
+main {
+  display: grid;
+  grid-template-columns: 4fr;
+  grid-template-rows: auto;
+}
+
+.card-holder {
+  margin: 40px 20px 20px 0px;
+  box-shadow: 0px 0px 2px 1px rgb(48, 48, 48);
+  padding: 10px 20px;
+  width: 300px;
+  border: 1px solid rgb(175, 175, 175);
+}
+
+.middle-text {
+  border-top: 1px solid rgb(175, 175, 175);
+  border-bottom: 1px solid rgb(175, 175, 175);
+}
