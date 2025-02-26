@@ -23,6 +23,7 @@
   <link
     href="styles.css"
     rel="stylesheet"
+    1
   >
   <script
     defer
@@ -46,189 +47,356 @@
     <form>
       <div>
         <h2>
-          Sorting Class
+          Filter by diet
         </h2>
       </div>
-      <div>
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
+      <div class="flex-parent">
+        <label>
+          <input
+            type="radio"
+            id="vegan"
+            name="diet"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">Vegan</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="vegetarian"
+            name="diet"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">Vegetarian</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="gluten-free"
+            name="diet"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">Gluten-free</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="dairy-free"
+            name="diet"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">Dairy-free</span>
+        </label>
       </div>
     </form>
 
     <form>
       <div>
         <h2>
-          Sorting Class
+          Sort by cost
         </h2>
       </div>
-      <div>
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
+      <div class="flex-parent">
+        <label>
+          <input
+            type="radio"
+            id="low-cost"
+            name="cost"
+            class="radio-style-second"
+          >
+          <span class="radio-style-second">Low</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="medium-cost"
+            name="cost"
+            class="radio-style-second"
+          >
+          <span class="radio-style-second">Medium</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="high-cost"
+            name="cost"
+            class="radio-style-second"
+          >
+          <span class="radio-style-second">High</span>
+        </label>
       </div>
     </form>
 
     <form>
       <div>
         <h2>
-          Sorting Class
+          Sort by time
         </h2>
       </div>
-      <div>
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-first"
-        >
+      <div class="flex-parent">
+        <label>
+          <input
+            type="radio"
+            id="15-min"
+            name="time"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">15 min</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="30-min"
+            name="time"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">30 min</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="45-min"
+            name="time"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">45 min</span>
+        </label>
+        <label>
+          <input
+            type="radio"
+            id="60-min"
+            name="time"
+            class="radio-style-first"
+          >
+          <span class="radio-style-first">60+ min</span>
+        </label>
       </div>
     </form>
-    <form>
-      <div>
-        <h2>
-          Sorting Class
-        </h2>
-      </div>
-      <div>
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-        <input
-          type="button"
-          id="name"
-          name="name"
-          value="name"
-          class="button-style-second"
-        >
-      </div>
-    </form>
+
   </section>
 
-  <main>
+  <main class="grid-holder">
     <!--each recipe is a "section"-->
     <section class="card-holder">
       <picture>
-        <img>
+        <img src="./img/recipe_one.png">
       </picture>
       <figcaption>
         <h2>
-          recipe
+          Cheat's cheesy focaccia
         </h2>
       </figcaption>
       <article class="middle-text">
         <h3>
-          some text
+          Cost:
         </h3>
         <p>
-          some text
+          100 SEK
         </p>
         <h3>
-          some text
+          Time:
         </h3>
         <p>
-          some text
+          65 minutes
         </p>
       </article>
-      <article>
+      <article class="end-text">
         <h3>
-          some text
+          Ingredients:
         </h3>
         <p>
-          some text
+          500 pack bread mix
+        </p>
+        <p>
+          2tbsp. olive oil, plus a little extra for drizzling
+        </p>
+        <p>
+          25g parmesan (or vegetarian alternative), grated
+        <p>
+          75g dolcelatte cheese (or vegetarian alternative)
         </p>
       </article>
     </section>
+
+    <section class="card-holder">
+      <picture>
+        <img
+          class="border-radius"
+          src="./img/corn.webp"
+        >
+      </picture>
+      <figcaption>
+        <h2>
+          Air fryer carrots
+        </h2>
+      </figcaption>
+      <article class="middle-text">
+        <h3>
+          Cost:
+        </h3>
+        <p>
+          125 SEK
+        </p>
+        <h3>
+          Time:
+        </h3>
+        <p>
+          10 minutes
+        </p>
+      </article>
+      <article class="end-text">
+        <h3>
+          Ingredients:
+        </h3>
+        <p>
+          Other than carrots, spices of choice are lemon pepper, italian seasoning and chili powder
+        </p>
+      </article>
+    </section>
+
+    <section class="card-holder">
+      <picture>
+        <img
+          class="border-radius"
+          src="./img/Beef.jpg"
+        >
+      </picture>
+      <figcaption>
+        <h2>
+          Quarantine goulash
+        </h2>
+      </figcaption>
+      <article class="middle-text">
+        <h3>
+          Cost:
+        </h3>
+        <p>
+          200 SEK
+        </p>
+        <h3>
+          Time:
+        </h3>
+        <p>
+          95 minutes
+        </p>
+      </article>
+      <article class="end-text">
+        <h3>
+          Ingredients:
+        </h3>
+        <p>
+          1 Tbsp olive oil
+        </p>
+        <p>
+          2 cups flank steak strips
+        </p>
+        <p>
+          3 cups grated carrots
+        </p>
+        <p>
+          1 ½ cup chopped onion
+        </p>
+        <p>
+          1 cup finely chopped kale
+        </p>
+        <p>
+          ½ parsley root, finely grated
+        </p>
+        <p>
+          ¼ celeriac, finely grated
+        </p>
+        <p>
+          2 bay leaves
+        </p>
+        dry juniper and black pepper to taste
+        <p>
+          parsley leaves to taste
+        </p>
+        salt to taste
+        <p>
+          2 tsp smoked paprika
+        </p>
+        1 1/3 cup beef stock
+        <p>
+          6 Tbsp tomato puree
+        </p>
+      </article>
+    </section>
+
+    <section class="card-holder">
+      <picture>
+        <img
+          class="border-radius"
+          src="./img/ziti.webp"
+        >
+      </picture>
+      <figcaption>
+        <h2>
+          Baked ziti
+        </h2>
+      </figcaption>
+      <article class="middle-text">
+        <h3>
+          Cost:
+        </h3>
+        <p>
+          50 SEK
+        </p>
+        <h3>
+          Time:
+        </h3>
+        <p>
+          45 minutes
+        </p>
+      </article>
+      <article class="end-text">
+        <h3>
+          Ingredients:
+        </h3>
+        <p>
+          1 lb. ground Italian sausage
+        </p>
+        <p>
+          1 yellow onion
+        </p>
+        <p>
+          3 oz. tomato paste
+        </p>
+        <p>
+          1 28oz. can crushed tomatoes
+        </p>
+        <p>
+          1 Tbsp Italian seasoning blend
+        </p>
+        <p>
+          1/2 cup water
+        </p>
+        <p>
+          1 lb. ziti
+        </p>
+        <p>
+          1/2 Tbsp salt
+        </p>
+        <p>
+          15 oz. ricotta
+        </p>
+        <p>
+          1 cup Italian cheese blend
+        </p>
+        <p>
+          1/4 tsp freshly cracked black pepper
+        </p>
+        <p>
+          2 cups shredded mozzarella
+        </p>
+      </article>
+    </section>
+    <div
+      class="card-holder"
+      id="response-box"
+    >
+      <P>Temp div for responses</P>
+    </div>
   </main>
 
 </body>

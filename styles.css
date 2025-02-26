@@ -1,77 +1,133 @@
 body {
   font-family: "Jost";
   font-style: normal;
-  font-optical-sizing: none;
-  padding: 20px 40px 0px 40px;
+  padding: 10px 20px 0px 20px;
+  margin: 0;
 }
 
 h1 {
   color: #0018A4;
+  padding-left: 10px;
 }
 
 .form-holder {
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
   width: 100%;
+}
+
+form {
+  grid-column: 1fr;
+  margin: 0 10px 0 10px;
 }
 
 h2 {
   font-size: 18px;
 }
 
-input[type=button] {
-  border: none;
-  color: white;
-  padding: 10px 20px;
+.flex-parent {
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.form-holder label {
+  cursor: pointer;
+}
+
+.radio-style-first {
+  background-color: #CCFFE2;
+  border: 2px solid #CCFFE2;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  color: #0018A4;
+  padding: 2px 4px;
   text-decoration: none;
   margin: 2px;
   cursor: pointer;
   border-radius: 25px;
+  width: 80px;
 }
 
-.button-style-first {
-  background-color: #87f8b8;
+.radio-style-second {
+  background-color: #FFECEA;
+  border: 2px solid #FFECEA;
+  display: flex;
+  align-content: center;
+  justify-content: center;
+  color: #0018A4;
+  padding: 2px 4px;
+  text-decoration: none;
+  margin: 2px;
+  cursor: pointer;
+  border-radius: 25px;
+  width: 80px;
 }
 
-.button-style-first:hover {
-  border: 1px solid #0018A4;
+.form-holder input {
+  display: none;
 }
 
-.button-style-first:active {
+.form-holder .radio-style-first:hover {
+  border: 2px solid #0018A4;
+}
+
+.form-holder .radio-style-first:checked+span {
   background-color: #0018A4;
-
+  border: 2px solid #0018A4;
+  color: white;
 }
 
-.button-style-second {
-  background-color: #f59bb0;
+.form-holder .radio-style-second:hover {
+  border: 2px solid #FF6589;
 }
 
-.button-style-second:hover {
-  border: 1px solid #f55a7e;
-
+.form-holder .radio-style-second:checked+span {
+  background-color: #FF6589;
+  border: 2px solid #FF6589;
+  color: white;
 }
 
-.button-style-second:active {
-  background-color: #f55a7e;
-
-}
-
-main {
+.grid-holder {
   display: grid;
-  grid-template-columns: 4fr;
-  grid-template-rows: auto;
+  grid-template-columns: repeat(4, 1fr);
+  justify-content: center;
+  min-width: 320px;
 }
 
 .card-holder {
-  margin: 40px 20px 20px 0px;
+  margin: 40px 20px 10px 20px;
+  border-radius: 5px;
   box-shadow: 0px 0px 2px 1px rgb(48, 48, 48);
-  padding: 10px 20px;
-  width: 300px;
+  padding: 20px 20px;
+  width: 80%;
   border: 1px solid rgb(175, 175, 175);
+}
+
+.card-holder:hover {
+  box-shadow: 0px 0px 4px 2px rgb(48, 48, 48);
+}
+
+picture {
+  height: auto;
+  width: auto;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.border-radius {
+  border-radius: 10px;
 }
 
 .middle-text {
   border-top: 1px solid rgb(175, 175, 175);
   border-bottom: 1px solid rgb(175, 175, 175);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.end-text p {
+  margin: 0;
 }
