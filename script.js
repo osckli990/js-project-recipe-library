@@ -33,6 +33,16 @@ const radioMix = [
 ]
 const responseBox = document.getElementById("response-box")
 
+//an object and not a function
+const messages = {
+  vegan: "Thats kinda weird",
+  vegetarian: "You like sallad, huh",
+  "gluten-free": "Don't really know what that means. buddy",
+  "dairy-free": "No milk?!"
+}
+
+module.exports = messages;
+
 const findRadio = () => {
   //loops through each element in array and returns the checked one
   for (let i = 0; i < radioMix.length; i++) {
@@ -47,8 +57,8 @@ const findRadio = () => {
 radioMix.forEach((radio) => {
   radio.addEventListener("change", () => {
     const selectedRadio = findRadio();
-    //search the array for id and innerHTML accordingly
-    console.log(selectedRadio);
+    //displays message based on matching id
+    responseBox.innerHTML += `<p>${messages[radio.id]}</p>`
   });
 });
 

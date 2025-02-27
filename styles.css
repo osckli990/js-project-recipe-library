@@ -131,3 +131,9 @@ picture {
 .end-text p {
   margin: 0;
 }
+
+@media (min-width: 1025px) and (max-width: 1409px) {}
+
+@media (min-width: 667px) and (max-width: 1024px) {}
+
+@media (max-width: 666px) {}
