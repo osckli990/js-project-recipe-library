@@ -41,8 +41,6 @@ const messages = {
   "dairy-free": "No milk?!"
 }
 
-module.exports = messages;
-
 const findRadio = () => {
   //loops through each element in array and returns the checked one
   for (let i = 0; i < radioMix.length; i++) {
