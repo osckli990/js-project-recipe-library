@@ -1,31 +1,92 @@
-/*
-const askForUsersName = () => {
-  console.log("askForUsersName function is running")
-  // console.log("Local scope")
+const recipes = [
+  {
+    id: 1,
+    title: "Vegan Lentil Soup",
+    image: "./chicken.webp",
+    readyInMinutes: 30,
+    sourceUrl: "https://example.com/vegan-lentil-soup",
+    diets: ["vegan"],
+    ingredients: [
+      "red lentils",
+      "carrots",
+      "onion",
+      "garlic",
+      "tomato paste",
+      "cumin",
+      "paprika",
+      "vegetable broth",
+      "olive oil",
+      "salt"
+    ],
+    pricePerServing: 2.5,
+  },
+  {
+    id: 2,
+    title: "Vegetarian Pesto Pasta",
+    image: "./chicken.webp",
+    readyInMinutes: 25,
+    sourceUrl: "https://example.com/vegetarian-pesto-pasta",
+    diets: ["vegetarian"],
+    ingredients: [
+      "pasta",
+      "basil",
+      "parmesan cheese",
+      "garlic",
+      "pine nuts",
+      "olive oil",
+      "salt",
+      "black pepper"
+    ],
+    pricePerServing: 3.0,
+  },
+  {
+    id: 3,
+    title: "Gluten-Free Chicken Stir-Fry",
+    image: "./chicken.webp",
+    readyInMinutes: 20,
+    sourceUrl: "https://example.com/gluten-free-chicken-stir-fry",
+    diets: ["gluten-free"],
+    ingredients: [
+      "chicken breast",
+      "broccoli",
+      "bell pepper",
+      "carrot",
+      "soy sauce (gluten-free)",
+      "ginger",
+      "garlic",
+      "sesame oil",
+      "cornstarch",
+      "green onion",
+      "sesame seeds",
+      "rice"
+    ],
+    pricePerServing: 4.0,
+  },
+  {
+    id: 4,
+    title: "Dairy-Free Tacos",
+    image: "./chicken.webp",
+    readyInMinutes: 15,
+    sourceUrl: "https://example.com/dairy-free-tacos",
+    diets: ["dairy-free"],
+    ingredients: [
+      "corn tortillas",
+      "ground beef",
+      "taco seasoning",
+      "lettuce",
+      "tomato",
+      "avocado"
+    ],
+    pricePerServing: 2.8,
+  },
+]
 
-  messageBox.innerHTML = `
-    <p>What's your name?</p>
-    <input id="userNameInput" />
-    <button id="sendButton">Send</button>
-  `
 
-  //We locate these DOM selectors here because the HTML elements were created in this local scope
-  userNameInput = document.getElementById("userNameInput")
-  const sendButton = document.getElementById("sendButton")
 
-  //We locate the eventListener here because the DOM selectors were created in this local scope
-  sendButton.addEventListener("click", () => {
-    console.log("send button is clicked")
-    askForUsersWeapon()
-    //askForUserWeapon(nameInput) to ship the local value
 
-  })
-}
-example code
 
-*/
 
-const radioMix = [
+const checkMix = [
   document.getElementById("vegan"),
   document.getElementById("vegetarian"),
   document.getElementById("gluten-free"),
@@ -37,42 +98,26 @@ const responseBox = document.getElementById("response-box")
 const messages = {
   vegan: "Thats kinda weird",
   vegetarian: "You like sallad, huh",
-  "gluten-free": "Don't really know what that means. buddy",
+  "gluten-free": "Don't really know what that means, buddy",
   "dairy-free": "No milk?!"
 }
 
-const findRadio = () => {
+const findCheck = () => {
   //loops through each element in array and returns the checked one
-  for (let i = 0; i < radioMix.length; i++) {
-    if (radioMix[i].checked) {
+  for (let i = 0; i < checkMix.length; i++) {
+    if (checkMix[i].checked) {
       console.log("returned")
-      return radioMix[i]
+      return checkMix[i]
     }
   }
 }
 
-//radio is just the current radio button inside .forEach()... "change" triggers when a radio button is selected. "change" is an event type
-radioMix.forEach((radio) => {
-  radio.addEventListener("change", () => {
-    const selectedRadio = findRadio();
+//checkbox is just the current checkbox button inside .forEach()... "change" triggers when a checkbox is selected. "change" is an event type
+checkMix.forEach((checkbox) => {
+  checkbox.addEventListener("change", () => {
+    const selectedCheck = findCheck();
     //displays message based on matching id
-    responseBox.innerHTML += `<p>${messages[radio.id]}</p>`
+    //    responseBox.innerHTML += `<p>${messages[checkbox.id]}</p>`
   });
 });
 
-/*
-radioMix.forEach(function () {
-  this.addEventListener("click", () => {
-    responseBox.innerHTML += `<p>You've selected the </p>`
-  })
-})
-  */
-
-/*
-const veganRadio = document.getElementById("vegan")
-
-veganRadio.addEventListener("click", () => {
-  const responseBox = document.getElementById("response-box")
-  responseBox.innerHTML += `<p>You've selected the vegan option</p>`
-})
-*/
