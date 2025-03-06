@@ -183,7 +183,7 @@ const loadRecipes = (recipeArray) => {
           Cost:
         </h3>
         <p>
-        ${recipe.pricePerServing} $
+        ${recipe.pricePerServing * 10} $
         </p>
         <h3>
           Time:
@@ -221,10 +221,7 @@ const getSelectedCost = () => {
 
   if (selectedRadioCost) {
     return selectedRadioCost.value
-  } else {
-    return null
-  }
-  // return cost value as a number
+  } //turn cost value as a number
 }
 
 const getSelectedTime = () => {
@@ -232,8 +229,6 @@ const getSelectedTime = () => {
 
   if (selectedRadioTime) {
     return parseInt(selectedRadioTime.value) //return the "value" as a number, the value being from the HMTL
-  } else {
-    return null
   }
 }
 
@@ -302,3 +297,10 @@ randomButton.addEventListener("click", () => {
 })
 
 loadRecipes(recipes) //load default recipes
+
+
+
+
+
+// ISSUES: when diet is un-selected the seventh recipe does not reload (wtf?).
+// ADD: more general if-check to if no recipes are displayed
