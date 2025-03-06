@@ -256,13 +256,13 @@ const updateRecipes = () => {
     filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime)
   }
 
-  if (selectedDiets.includes("vegetarian") && selectedTime === 15) { //very specific case but othe only one that results in a empty combination
+  if (filteredRecipes.length === 0) { //once filteredRecipes reaches this part and contains no valid recipes, we simply display this message. a simple spell, yet quite unbreakable
     container.innerHTML = `
       <section class="card-holder">
         <h2>No valid recipes</h2>
       </section>
     `
-    return // Exit the function to prevent loadRecipes from being called
+    return // Exit the function to prevent loadRecipes from being called. super proud of this one
   }
 
   loadRecipes(filteredRecipes)
@@ -297,10 +297,3 @@ randomButton.addEventListener("click", () => {
 })
 
 loadRecipes(recipes) //load default recipes
-
-
-
-
-
-// ISSUES: when diet is un-selected the seventh recipe does not reload (wtf?).
-// ADD: more general if-check to if no recipes are displayed
