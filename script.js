@@ -82,10 +82,6 @@ const recipes = [
 ]
 
 
-
-
-
-
 const checkMix = [
   document.getElementById("vegan"),
   document.getElementById("vegetarian"),
@@ -93,7 +89,63 @@ const checkMix = [
   document.getElementById("dairy-free")
 ]
 const responseBox = document.getElementById("response-box")
+const container = document.getElementById("recipeHolder")
 
+//add array objects into html - title, image, ingredient and price visible. 
+const loadRecipes = (recipeArray) => {
+  //container.innerHTML = '' //resets the container before we load the dogs
+
+  recipeArray.forEach(recipe => {
+    container.innerHTML += `
+    <section
+      class="card-holder"
+      id="${recipe.id}"
+    >
+      <picture>
+        <img src="${recipe.image}">
+      </picture>
+      <figcaption>
+        <h2>
+          ${recipe.title}
+        </h2>
+      </figcaption>
+      <article class="middle-text">
+        <h3>
+          Cost:
+        </h3>
+        <p>
+        ${recipe.pricePerServing} $
+        </p>
+        <h3>
+          Time:
+        </h3>
+        <p>
+        ${recipe.readyInMinutes} Min
+        </p>
+      </article>
+      <article class="end-text">
+        <h3>
+          Ingredients:
+        </h3>
+        <ul>
+        ${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+        </ul>
+      </article>
+    </section>`
+  })
+}
+
+/*
+const renderIngredients = (ingredients) => {
+  return `<ul>
+  ${ingredients.map((ingredient) => `<li>${ingredient}</li>`).join('')}</ul>`
+}
+  */
+
+
+loadRecipes(recipes)
+
+/*
 //an object and not a function
 const messages = {
   vegan: "Thats kinda weird",
@@ -101,12 +153,12 @@ const messages = {
   "gluten-free": "Don't really know what that means, buddy",
   "dairy-free": "No milk?!"
 }
+*/
 
 const findCheck = () => {
   //loops through each element in array and returns the checked one
   for (let i = 0; i < checkMix.length; i++) {
     if (checkMix[i].checked) {
-      console.log("returned")
       return checkMix[i]
     }
   }
@@ -116,6 +168,7 @@ const findCheck = () => {
 checkMix.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {
     const selectedCheck = findCheck();
+
     //displays message based on matching id
     //    responseBox.innerHTML += `<p>${messages[checkbox.id]}</p>`
   });

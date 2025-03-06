@@ -88,6 +88,12 @@ h2 {
   color: white;
 }
 
+.form-holder .radio-style-second:active+span {
+  background-color: #FF6589;
+  border: 2px solid #FF6589;
+  color: white;
+}
+
 .grid-holder {
   display: grid;
   grid-template-columns: repeat(4, 1fr);
@@ -130,8 +136,10 @@ picture {
   justify-content: space-between;
 }
 
-.end-text p {
+.end-text ul {
+  list-style-type: none;
   margin: 0;
+  padding: 0;
 }
 
 @media (min-width: 1025px) and (max-width: 1440px) {
