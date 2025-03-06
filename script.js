@@ -205,33 +205,70 @@ const loadRecipes = (recipeArray) => {
 }
 
 const getSelectedDiets = () => {
-  let selected = []; // Start with an empty array
+  let selected = [] // Start with an empty array
 
   checkMix.forEach(checkbox => {
     if (checkbox.checked) {
-      selected.push(checkbox.id); // Add the checkbox ID if checked
+      selected.push(checkbox.id) // Add the checkbox ID if checked
     }
   });
 
-  return selected; // Return the list of selected diets
+  return selected // Return the list of selected diets
 }
 
-//checkbox is just the current checkbox button inside .forEach()... "change" triggers when a checkbox is selected. "change" is an event type
-checkMix.forEach((checkbox) => {
+const getSelectedCost = () => {
+  const selectedRadioCost = document.querySelector('input[name="cost"]:checked')
+
+  if (selectedRadioCost) {
+    return parseInt(selectedRadioCost.value)
+  } else {
+    return null
+  }
+  // return cost value as a number
+}
+
+const getSelectedTime = () => {
+  const selectedRadioTime = document.querySelector('input[name="time"]:checked')
+
+  if (selectedRadioTime) {
+    return parseInt(selectedRadioTime.value)
+  } else {
+    return null
+  }
+}
+
+const updateRecipes = () => {
+  let selectedDiets = getSelectedDiets()
+  let selectedCost = getSelectedCost()
+  let selectedTime = getSelectedTime()
+
+
+
+
+
+  loadRecipes(filteredRecipes)
+
+}
+
+// Listen for changes on checkboxes
+checkMix.forEach(checkbox => {
   checkbox.addEventListener("change", () => {
-    const selectedDiets = getSelectedDiets()
+    updateRecipes()
+  });
+});
 
-    if (selectedDiets.length === 0) {
-      loadRecipes(recipes);  // No filters, show all recipes
-      return
-    }
+// Listen for changes on radio buttons
+costMix.forEach(radio => {
+  radio.addEventListener("change", () => {
+    updateRecipes()
+  });
+});
 
-    const filteredArray = recipes.filter(recipe => recipe.diets.some(diet => selectedDiets.includes(diet)) // At least one match
-    )
-
-    loadRecipes(filteredArray);
-  })
-})
+timeMix.forEach(radio => {
+  radio.addEventListener("change", () => {
+    updateRecipes()
+  });
+});
 
 loadRecipes(recipes)
 
