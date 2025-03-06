@@ -210,7 +210,7 @@ const getSelectedDiets = () => {
     if (checkbox.checked) {
       selected.push(checkbox.id) // Add the checkbox ID if checked
     }
-  });
+  })//call me "the lord of checkboxes" because i'm proud of this one
 
   return selected // Return the list of selected diets
 }
@@ -243,6 +243,7 @@ const updateRecipes = () => {
 
   let filteredRecipes = recipes.filter(recipe =>
     selectedDiets.some(diet => recipe.diets.includes(diet)) //if the recipe has any of the selected diets it will be included in the filteredRecipes array
+    // used selectedDiets.every before, but that would result in no recipes being shown if more than one diet was selected and i don't know why
   )
 
   if (selectedDiets.length === 0) {
@@ -250,13 +251,13 @@ const updateRecipes = () => {
   }
 
   if (selectedCost === "low") {
-    filteredRecipes.sort((a, b) => a.pricePerServing - b.pricePerServing); //lowest to highest
+    filteredRecipes.sort((a, b) => a.pricePerServing - b.pricePerServing) //lowest to highest
   } else if (selectedCost === "high") {
-    filteredRecipes.sort((a, b) => b.pricePerServing - a.pricePerServing); //highest to lowest
+    filteredRecipes.sort((a, b) => b.pricePerServing - a.pricePerServing) //highest to lowest
   }
 
   if (selectedTime !== null) {
-    filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime);
+    filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime)
   }
 
   loadRecipes(filteredRecipes)
@@ -268,21 +269,21 @@ const updateRecipes = () => {
 checkMix.forEach(checkbox => {
   checkbox.addEventListener("change", () => {
     updateRecipes()
-  });
-});
+  })
+})
 
 // Listen for changes on radio buttons
 costMix.forEach(radio => {
   radio.addEventListener("change", () => {
     updateRecipes()
-  });
-});
+  })
+})
 
 timeMix.forEach(radio => {
   radio.addEventListener("change", () => {
     updateRecipes()
-  });
-});
+  })
+})
 
 loadRecipes(recipes) //load default recipes
 
