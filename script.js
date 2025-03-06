@@ -148,7 +148,6 @@ const checkMix = [
 ]
 const costMix = [
   document.getElementById("low-cost"),
-  document.getElementById("medium-cost"),
   document.getElementById("high-cost")
 ]
 const timeMix = [
@@ -220,7 +219,7 @@ const getSelectedCost = () => {
   const selectedRadioCost = document.querySelector('input[name="cost"]:checked')
 
   if (selectedRadioCost) {
-    return parseInt(selectedRadioCost.value)
+    return selectedRadioCost.value
   } else {
     return null
   }
@@ -231,7 +230,7 @@ const getSelectedTime = () => {
   const selectedRadioTime = document.querySelector('input[name="time"]:checked')
 
   if (selectedRadioTime) {
-    return parseInt(selectedRadioTime.value)
+    return parseInt(selectedRadioTime.value) //return the "value" as a number, the value being from the HMTL
   } else {
     return null
   }
@@ -242,11 +241,26 @@ const updateRecipes = () => {
   let selectedCost = getSelectedCost()
   let selectedTime = getSelectedTime()
 
+  let filteredRecipes = recipes.filter(recipe =>
+    selectedDiets.some(diet => recipe.diets.includes(diet)) //if the recipe has any of the selected diets it will be included in the filteredRecipes array
+  )
 
+  if (selectedDiets.length === 0) {
+    filteredRecipes = recipes; //if no diets are selected, show all recipes
+  }
 
+  if (selectedCost === "low") {
+    filteredRecipes.sort((a, b) => a.pricePerServing - b.pricePerServing); //lowest to highest
+  } else if (selectedCost === "high") {
+    filteredRecipes.sort((a, b) => b.pricePerServing - a.pricePerServing); //highest to lowest
+  }
 
+  if (selectedTime !== null) {
+    filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime);
+  }
 
   loadRecipes(filteredRecipes)
+
 
 }
 
@@ -270,6 +284,6 @@ timeMix.forEach(radio => {
   });
 });
 
-loadRecipes(recipes)
+loadRecipes(recipes) //load default recipes
 
 
