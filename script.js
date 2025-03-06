@@ -158,6 +158,7 @@ const timeMix = [
 ]
 
 const container = document.getElementById("recipeHolder")
+const randomButton = document.getElementById("randomize")
 
 //the recipe in html
 const loadRecipes = (recipeArray) => {
@@ -196,11 +197,11 @@ const loadRecipes = (recipeArray) => {
           Ingredients:
         </h3>
         <ul>
-        ${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')}
+        ${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')} 
         </ul>
       </article>
     </section>`
-  })
+  }) //map the ingredients to a list, then join them because map returns an array and we want a string
 }
 
 const getSelectedDiets = () => {
@@ -260,6 +261,15 @@ const updateRecipes = () => {
     filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime)
   }
 
+  if (selectedDiets.includes("vegetarian") && selectedTime === 15) { //very specific case but othe only one that results in a empty combination
+    container.innerHTML = `
+      <section class="card-holder">
+        <h2>No valid recipes</h2>
+      </section>
+    `
+    return // Exit the function to prevent loadRecipes from being called
+  }
+
   loadRecipes(filteredRecipes)
 
 
@@ -285,6 +295,10 @@ timeMix.forEach(radio => {
   })
 })
 
+randomButton.addEventListener("click", () => {
+  const randomIndex = Math.floor(Math.random() * recipes.length)
+  const randomRecipe = [recipes[randomIndex]]
+  loadRecipes(randomRecipe)
+})
+
 loadRecipes(recipes) //load default recipes
-
-
