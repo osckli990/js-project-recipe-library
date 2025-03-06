@@ -157,12 +157,12 @@ const timeMix = [
   document.getElementById("45-min"),
   document.getElementById("60-min")
 ]
-const responseBox = document.getElementById("response-box")
+
 const container = document.getElementById("recipeHolder")
 
-//add array objects into html - title, image, ingredient and price visible. 
+//the recipe in html
 const loadRecipes = (recipeArray) => {
-  //container.innerHTML = '' //resets the container before we load the dogs
+  container.innerHTML = '' //resets the container before we load the recipes
 
   recipeArray.forEach(recipe => {
     container.innerHTML += `
@@ -204,35 +204,35 @@ const loadRecipes = (recipeArray) => {
   })
 }
 
-const filterDogs = () => {
-  const filterValue = filterDropdown.value
+const getSelectedDiets = () => {
+  let selected = []; // Start with an empty array
 
-  if (filterValue === 'all') {
-    loadDogs(DOGS)
-  } else {
-    const filteredArray = DOGS.filter(dog => dog.fur.toLowerCase() === filterValue.toLowerCase())
-    loadDogs(filteredArray)
-  }
-
-}
-
-loadRecipes(recipes)
-
-const findCheck = () => {
-  //loops through each element in array and returns the checked one
-  for (let i = 0; i < checkMix.length; i++) {
-    if (checkMix[i].checked) {
-      return checkMix[i]
+  checkMix.forEach(checkbox => {
+    if (checkbox.checked) {
+      selected.push(checkbox.id); // Add the checkbox ID if checked
     }
-  }
+  });
+
+  return selected; // Return the list of selected diets
 }
 
 //checkbox is just the current checkbox button inside .forEach()... "change" triggers when a checkbox is selected. "change" is an event type
 checkMix.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {
-    const selectedCheck = findCheck();
+    const selectedDiets = getSelectedDiets()
 
+    if (selectedDiets.length === 0) {
+      loadRecipes(recipes);  // No filters, show all recipes
+      return
+    }
 
-  });
-});
+    const filteredArray = recipes.filter(recipe => recipe.diets.some(diet => selectedDiets.includes(diet)) // At least one match
+    )
+
+    loadRecipes(filteredArray);
+  })
+})
+
+loadRecipes(recipes)
+
 

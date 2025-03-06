@@ -112,7 +112,6 @@ h2 {
 }
 
 .card-holder:hover {
-  box-shadow: 0px 0px 4px 2px rgb(48, 48, 48);
   border: 2px solid #0018A4;
 }
 
