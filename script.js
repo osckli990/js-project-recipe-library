@@ -2,7 +2,7 @@ const recipes = [
   {
     id: 1,
     title: "Vegan Lentil Soup",
-    image: "./chicken.webp",
+    image: "./img/empty.webp",
     readyInMinutes: 30,
     sourceUrl: "https://example.com/vegan-lentil-soup",
     diets: ["vegan"],
@@ -23,7 +23,7 @@ const recipes = [
   {
     id: 2,
     title: "Vegetarian Pesto Pasta",
-    image: "./chicken.webp",
+    image: "./img/empty.webp",
     readyInMinutes: 25,
     sourceUrl: "https://example.com/vegetarian-pesto-pasta",
     diets: ["vegetarian"],
@@ -42,7 +42,7 @@ const recipes = [
   {
     id: 3,
     title: "Gluten-Free Chicken Stir-Fry",
-    image: "./chicken.webp",
+    image: "./img/empty.webp",
     readyInMinutes: 20,
     sourceUrl: "https://example.com/gluten-free-chicken-stir-fry",
     diets: ["gluten-free"],
@@ -65,7 +65,7 @@ const recipes = [
   {
     id: 4,
     title: "Dairy-Free Tacos",
-    image: "./chicken.webp",
+    image: "./img/empty.webp",
     readyInMinutes: 15,
     sourceUrl: "https://example.com/dairy-free-tacos",
     diets: ["dairy-free"],
@@ -79,6 +79,64 @@ const recipes = [
     ],
     pricePerServing: 2.8,
   },
+  {
+    id: 5,
+    title: "Middle Eastern Hummus",
+    image: "./img/empty.webp",
+    readyInMinutes: 10,
+    sourceUrl: "https://example.com/middle-eastern-hummus",
+    diets: ["vegan", "gluten-free"],
+    ingredients: [
+      "chickpeas",
+      "tahini",
+      "garlic",
+      "lemon juice",
+      "olive oil"
+    ],
+    pricePerServing: 1.5,
+  },
+  {
+    id: 6,
+    title: "Quick Avocado Toast",
+    image: "./img/empty.webp",
+    readyInMinutes: 5,
+    sourceUrl: "https://example.com/quick-avocado-toast",
+    diets: ["vegan"],
+    ingredients: [
+      "bread",
+      "avocado",
+      "lemon juice",
+      "salt"
+    ],
+    pricePerServing: 2.0,
+  },
+  {
+    id: 7,
+    title: "Beef Stew",
+    image: "./img/empty.webp",
+    readyInMinutes: 90,
+    sourceUrl: "https://example.com/beef-stew",
+    diets: [],
+    ingredients: [
+      "beef chunks",
+      "potatoes",
+      "carrots",
+      "onion",
+      "garlic",
+      "tomato paste",
+      "beef broth",
+      "red wine",
+      "bay leaves",
+      "thyme",
+      "salt",
+      "black pepper",
+      "butter",
+      "flour",
+      "celery",
+      "mushrooms"
+    ],
+    pricePerServing: 5.5,
+  }
 ]
 
 
@@ -87,6 +145,17 @@ const checkMix = [
   document.getElementById("vegetarian"),
   document.getElementById("gluten-free"),
   document.getElementById("dairy-free")
+]
+const costMix = [
+  document.getElementById("low-cost"),
+  document.getElementById("medium-cost"),
+  document.getElementById("high-cost")
+]
+const timeMix = [
+  document.getElementById("15-min"),
+  document.getElementById("30-min"),
+  document.getElementById("45-min"),
+  document.getElementById("60-min")
 ]
 const responseBox = document.getElementById("response-box")
 const container = document.getElementById("recipeHolder")
@@ -135,25 +204,19 @@ const loadRecipes = (recipeArray) => {
   })
 }
 
-/*
-const renderIngredients = (ingredients) => {
-  return `<ul>
-  ${ingredients.map((ingredient) => `<li>${ingredient}</li>`).join('')}</ul>`
-}
-  */
+const filterDogs = () => {
+  const filterValue = filterDropdown.value
 
+  if (filterValue === 'all') {
+    loadDogs(DOGS)
+  } else {
+    const filteredArray = DOGS.filter(dog => dog.fur.toLowerCase() === filterValue.toLowerCase())
+    loadDogs(filteredArray)
+  }
+
+}
 
 loadRecipes(recipes)
-
-/*
-//an object and not a function
-const messages = {
-  vegan: "Thats kinda weird",
-  vegetarian: "You like sallad, huh",
-  "gluten-free": "Don't really know what that means, buddy",
-  "dairy-free": "No milk?!"
-}
-*/
 
 const findCheck = () => {
   //loops through each element in array and returns the checked one
@@ -169,8 +232,7 @@ checkMix.forEach((checkbox) => {
   checkbox.addEventListener("change", () => {
     const selectedCheck = findCheck();
 
-    //displays message based on matching id
-    //    responseBox.innerHTML += `<p>${messages[checkbox.id]}</p>`
+
   });
 });
 
