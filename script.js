@@ -157,6 +157,8 @@ const timeMix = [
   document.getElementById("60-min")
 ]
 
+
+
 const container = document.getElementById("recipeHolder")
 const randomButton = document.getElementById("randomize")
 
@@ -246,15 +248,16 @@ const updateRecipes = () => {
     filteredRecipes = recipes; //if no diets are selected, show all recipes
   }
 
+  filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime)
+
   if (selectedCost === "low") {
     filteredRecipes.sort((a, b) => a.pricePerServing - b.pricePerServing) //lowest to highest
   } else if (selectedCost === "high") {
     filteredRecipes.sort((a, b) => b.pricePerServing - a.pricePerServing) //highest to lowest
+  } else if (selectedTime !== null) {
+    filteredRecipes.sort((a, b) => a.readyInMinutes - b.readyInMinutes); // Fastest first
   }
 
-  if (selectedTime !== null) {
-    filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime)
-  }
 
   if (filteredRecipes.length === 0) { //once filteredRecipes reaches this part and contains no valid recipes, we simply display this message. a simple spell, yet quite unbreakable
     container.innerHTML = `
@@ -297,3 +300,4 @@ randomButton.addEventListener("click", () => {
 })
 
 loadRecipes(recipes) //load default recipes
+
