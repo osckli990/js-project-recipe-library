@@ -1,7 +1,8 @@
 body {
   font-family: "Jost";
   font-style: normal;
-  padding: 10px 20px 0px 20px;
+  padding: 0;
+  /*padding: 10px 20px 0px 20px;*/
   margin: 0;
 }
 
@@ -12,7 +13,8 @@ h1 {
 
 .form-holder {
   display: grid;
-  grid-template-columns: repeat(3, 1fr);
+  /*grid-template-columns: repeat(3, 1fr);*/
+  grid-template-columns: repeat(1, 1fr);
   width: 100%;
 }
 
@@ -96,8 +98,8 @@ h2 {
 
 .grid-holder {
   display: grid;
-  grid-template-columns: repeat(4, 1fr);
-  min-width: 320px;
+  grid-template-columns: repeat(1, 1fr);
+  /*grid-template-columns: repeat(4, 1fr);*/
   place-items: center;
   align-items: flex-start;
 }
@@ -141,43 +143,32 @@ picture {
   padding: 0;
 }
 
-@media (min-width: 1025px) and (max-width: 1440px) {
-  .grid-holder {
-    grid-template-columns: repeat(2, 1fr);
-    min-width: unset;
-  }
-}
-
-@media (min-width: 667px) and (max-width: 1024px) {
-  .grid-holder {
-    grid-template-columns: repeat(2, 1fr);
-    min-width: unset;
-  }
-}
-
-/*works to 320px*/
-@media (max-width: 745px) {
-  .grid-holder {
-    grid-template-columns: repeat(1, 1fr);
-    min-width: unset;
-  }
-
-  .form-holder {
-    grid-template-columns: repeat(2, 1fr);
-  }
-}
-
-@media (max-width: 470px) {
+@media (min-width: 470px) {
   body {
-    padding: 0;
+    padding: 10px 20px 0px 20px;
   }
 
   .grid-holder {
     grid-template-columns: repeat(1, 1fr);
-    min-width: unset;
   }
 
   .form-holder {
-    grid-template-columns: repeat(1, 1fr);
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1024px) {
+  .grid-holder {
+    grid-template-columns: repeat(2, 1fr);
+  }
+}
+
+@media (min-width: 1440px) {
+  .grid-holder {
+    grid-template-columns: repeat(4, 1fr);
+  }
+
+  .form-holder {
+    grid-template-columns: repeat(3, 1fr);
   }
 }

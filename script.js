@@ -140,24 +140,22 @@ const recipes = [
 ]
 
 
-const checkMix = [
+const checkMix = [ //checkbox
   document.getElementById("vegan"),
   document.getElementById("vegetarian"),
   document.getElementById("gluten-free"),
   document.getElementById("dairy-free")
 ]
-const costMix = [
+const costMix = [ //switched to checkbox to be able to sort based on time while unchecked, otherwise these takes presidence
   document.getElementById("low-cost"),
   document.getElementById("high-cost")
 ]
-const timeMix = [
+const timeMix = [ //radio
   document.getElementById("15-min"),
   document.getElementById("30-min"),
   document.getElementById("45-min"),
   document.getElementById("60-min")
 ]
-
-
 
 const container = document.getElementById("recipeHolder")
 const randomButton = document.getElementById("randomize")
@@ -219,10 +217,21 @@ const getSelectedDiets = () => {
 }
 
 const getSelectedCost = () => {
-  const selectedRadioCost = document.querySelector('input[name="cost"]:checked')
+  const selectedCheckCost = document.querySelector('input[name="cost"]:checked')
+  const costCheckboxes = document.querySelectorAll('input[name="cost"]') //changed from radio the checkbox, gathers all
 
-  if (selectedRadioCost) {
-    return selectedRadioCost.value
+  costCheckboxes.forEach(checkbox => {
+    checkbox.addEventListener("change", function () {
+      if (this.checked) { //if the current document.queryselectorall with name cost is selected, uncheck all others
+        costCheckboxes.forEach(cb => {
+          if (cb !== this) cb.checked = false; // Uncheck all others
+        })
+      }
+    })
+  })
+
+  if (selectedCheckCost) {
+    return selectedCheckCost.value
   } //turn cost value as a number
 }
 
@@ -281,8 +290,8 @@ checkMix.forEach(checkbox => {
 })
 
 // Listen for changes on radio buttons
-costMix.forEach(radio => {
-  radio.addEventListener("change", () => {
+costMix.forEach(checkbox => {
+  checkbox.addEventListener("change", () => {
     updateRecipes()
   })
 })
@@ -294,7 +303,7 @@ timeMix.forEach(radio => {
 })
 
 randomButton.addEventListener("click", () => {
-  const randomIndex = Math.floor(Math.random() * recipes.length)
+  const randomIndex = Math.floor(Math.random() * recipes.length) //randomize function for all recipes
   const randomRecipe = [recipes[randomIndex]]
   loadRecipes(randomRecipe)
 })
