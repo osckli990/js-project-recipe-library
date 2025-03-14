@@ -188,7 +188,7 @@ const fetchData = async () => {
       console.error("Error fetching recipes:", error)
     }
   }
-  else {
+  else { //
     container.innerHTML += `
     <a class="card-holder">
       <h2>Limit reached</h2>
