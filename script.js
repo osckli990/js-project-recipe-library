@@ -3,149 +3,7 @@ const amount = "8"
 const includedDiets = ['vegan|vegetarian|gluten free|dairy free'];
 const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${amount}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true`
 //titel and image always included?
-
-/*
-const recipes = [
-  {
-    id: 1,
-    title: "Vegan Lentil Soup",
-    image: "./img/empty.webp",
-    readyInMinutes: 30,
-    sourceUrl: "https://example.com/vegan-lentil-soup",
-    diets: ["vegan"],
-    ingredients: [
-      "red lentils",
-      "carrots",
-      "onion",
-      "garlic",
-      "tomato paste",
-      "cumin",
-      "paprika",
-      "vegetable broth",
-      "olive oil",
-      "salt"
-    ],
-    pricePerServing: 2.5,
-  },
-  {
-    id: 2,
-    title: "Vegetarian Pesto Pasta",
-    image: "./img/empty.webp",
-    readyInMinutes: 25,
-    sourceUrl: "https://example.com/vegetarian-pesto-pasta",
-    diets: ["vegetarian"],
-    ingredients: [
-      "pasta",
-      "basil",
-      "parmesan cheese",
-      "garlic",
-      "pine nuts",
-      "olive oil",
-      "salt",
-      "black pepper"
-    ],
-    pricePerServing: 3.0,
-  },
-  {
-    id: 3,
-    title: "Gluten-Free Chicken Stir-Fry",
-    image: "./img/empty.webp",
-    readyInMinutes: 20,
-    sourceUrl: "https://example.com/gluten-free-chicken-stir-fry",
-    diets: ["gluten-free"],
-    ingredients: [
-      "chicken breast",
-      "broccoli",
-      "bell pepper",
-      "carrot",
-      "soy sauce (gluten-free)",
-      "ginger",
-      "garlic",
-      "sesame oil",
-      "cornstarch",
-      "green onion",
-      "sesame seeds",
-      "rice"
-    ],
-    pricePerServing: 4.0,
-  },
-  {
-    id: 4,
-    title: "Dairy-Free Tacos",
-    image: "./img/empty.webp",
-    readyInMinutes: 15,
-    sourceUrl: "https://example.com/dairy-free-tacos",
-    diets: ["dairy-free"],
-    ingredients: [
-      "corn tortillas",
-      "ground beef",
-      "taco seasoning",
-      "lettuce",
-      "tomato",
-      "avocado"
-    ],
-    pricePerServing: 2.8,
-  },
-  {
-    id: 5,
-    title: "Middle Eastern Hummus",
-    image: "./img/empty.webp",
-    readyInMinutes: 10,
-    sourceUrl: "https://example.com/middle-eastern-hummus",
-    diets: ["vegan", "gluten-free"],
-    ingredients: [
-      "chickpeas",
-      "tahini",
-      "garlic",
-      "lemon juice",
-      "olive oil"
-    ],
-    pricePerServing: 1.5,
-  },
-  {
-    id: 6,
-    title: "Quick Avocado Toast",
-    image: "./img/empty.webp",
-    readyInMinutes: 5,
-    sourceUrl: "https://example.com/quick-avocado-toast",
-    diets: ["vegan"],
-    ingredients: [
-      "bread",
-      "avocado",
-      "lemon juice",
-      "salt"
-    ],
-    pricePerServing: 2.0,
-  },
-  {
-    id: 7,
-    title: "Beef Stew",
-    image: "./img/empty.webp",
-    readyInMinutes: 90,
-    sourceUrl: "https://example.com/beef-stew",
-    diets: [],
-    ingredients: [
-      "beef chunks",
-      "potatoes",
-      "carrots",
-      "onion",
-      "garlic",
-      "tomato paste",
-      "beef broth",
-      "red wine",
-      "bay leaves",
-      "thyme",
-      "salt",
-      "black pepper",
-      "butter",
-      "flour",
-      "celery",
-      "mushrooms"
-    ],
-    pricePerServing: 5.5,
-  }
-]
-*/
+//complex search to include everything i want instead of getting 20 recipes and only being able to use 3. addnutrition to get ingredients
 
 const checkMix = [ //checkbox
   document.getElementById("vegan"),
@@ -171,48 +29,45 @@ const randomButton = document.getElementById("randomize")
 const loadRecipes = (recipeObject) => {
   container.innerHTML = '' //resets the container before we load the recipes
 
-
   recipeObject.results.forEach(recipe => {
 
-
     container.innerHTML += `
-    <section
-      class="card-holder"
-      id="${recipe.id}"
-    >
-      <picture>
-        <img src="${recipe.image}">
-      </picture>
-      <figcaption>
-        <h2>
-          ${recipe.title}
-        </h2>
-      </figcaption>
-      <article class="middle-text">
-        <h3>
-          Cost:
-        </h3>
-        <p>
-        ${recipe.pricePerServing} $
-        </p>
-        <h3>
-          Time:
-        </h3>
-        <p>
-        ${recipe.readyInMinutes} Min
-        </p>
-      </article>
-      <article class="end-text">
-        <h3>
-          Ingredients:
-        </h3>
-        <ul>
-        ${recipe.nutrition.ingredients.forEach(ingredient => {
-      <p>${ingredient.name}</p>
-    })}
-        </ul>
-      </article>
-    </section>`
+    <a class="card-holder" href="${recipe.sourceUrl}">
+      <section
+        id="${recipe.id}"
+      >
+        <picture>
+          <img src="${recipe.image}">
+        </picture>
+        <figcaption>
+          <h2>
+            ${recipe.title}
+          </h2>
+        </figcaption>
+        <article class="middle-text">
+          <h3>
+            Cost:
+          </h3>
+          <p>
+          ${recipe.pricePerServing} $
+          </p>
+          <h3>
+            Time:
+          </h3>
+          <p>
+          ${recipe.readyInMinutes} Min
+          </p>
+        </article>
+        <article class="end-text">
+          <h3>
+            Ingredients:
+          </h3>
+          <ul>
+          ${recipe.nutrition.ingredients.map(ingredient => `<li>${ingredient.name}</li>`).join('')}
+          </ul>
+        </article>
+      </section>
+    </a>`
   })
 }
 
@@ -260,7 +115,7 @@ const getSelectedTime = () => {
   }
 }
 
-const updateRecipes = () => {
+const updateRecipes = (currentRecipe) => {
   let selectedDiets = getSelectedDiets()
   let selectedCost = getSelectedCost()
   let selectedTime = getSelectedTime()
@@ -336,15 +191,13 @@ const fetchData = async () => {
   if (storedRecipes.length === 0) { // Only fetch if no recipe is stored
     try {
       const response = await fetch(URLExtended)
-      const fetchedRecipe = await response.json()
-      //const validResponse = fetchedRecipe.recipes.filter(recipe => {
-      //  return recipe.extendedIngredients.length > 0 && recipe.image && recipe.title && recipe.diets === "vegetarian" || "vegan" || "dairy-free" || "gluten-free"
-      //})
+      const fetchedRecipes = await response.json()
+
 
       storedRecipes = localStorage.setItem("recipes", JSON.stringify(fetchedRecipe)) // Store as an array
 
-      console.log("Fetched and stored recipe:", fetchedRecipe)
-      loadRecipes(fetchedRecipe)
+      console.log("Fetched and stored recipe:", fetchedRecipes)
+      loadRecipes(fetchedRecipes)
     } catch (error) {
       console.error("Error fetching recipe:", error)
     }
