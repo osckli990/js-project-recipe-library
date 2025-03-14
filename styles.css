@@ -125,6 +125,12 @@ picture {
   justify-content: center;
 }
 
+img {
+  border-radius: 8px;
+  height: 200px;
+  align-self: stretch;
+}
+
 .border-radius {
   border-radius: 10px;
 }
@@ -155,11 +161,19 @@ picture {
   .form-holder {
     grid-template-columns: repeat(2, 1fr);
   }
+
+  img {
+    height: 250px;
+  }
 }
 
 @media (min-width: 1024px) {
   .grid-holder {
     grid-template-columns: repeat(2, 1fr);
+  }
+
+  img {
+    height: 300px;
   }
 }
 
@@ -170,5 +184,9 @@ picture {
 
   .form-holder {
     grid-template-columns: repeat(3, 1fr);
+  }
+
+  img {
+    height: 200px;
   }
 }

@@ -1,3 +1,10 @@
+const apiKey = "320b154c621249e194a24f0ee7f4ec7b"
+const amount = "8"
+const includedDiets = ['vegan|vegetarian|gluten free|dairy free'];
+const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${amount}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true`
+//titel and image always included?
+
+/*
 const recipes = [
   {
     id: 1,
@@ -138,7 +145,7 @@ const recipes = [
     pricePerServing: 5.5,
   }
 ]
-
+*/
 
 const checkMix = [ //checkbox
   document.getElementById("vegan"),
@@ -161,10 +168,13 @@ const container = document.getElementById("recipeHolder")
 const randomButton = document.getElementById("randomize")
 
 //the recipe in html
-const loadRecipes = (recipeArray) => {
+const loadRecipes = (recipeObject) => {
   container.innerHTML = '' //resets the container before we load the recipes
 
-  recipeArray.forEach(recipe => {
+
+  recipeObject.results.forEach(recipe => {
+
+
     container.innerHTML += `
     <section
       class="card-holder"
@@ -183,7 +193,7 @@ const loadRecipes = (recipeArray) => {
           Cost:
         </h3>
         <p>
-        ${recipe.pricePerServing * 10} $
+        ${recipe.pricePerServing} $
         </p>
         <h3>
           Time:
@@ -197,11 +207,13 @@ const loadRecipes = (recipeArray) => {
           Ingredients:
         </h3>
         <ul>
-        ${recipe.ingredients.map(ingredient => `<li>${ingredient}</li>`).join('')} 
+        ${recipe.nutrition.ingredients.forEach(ingredient => {
+      <p>${ingredient.name}</p>
+    })}
         </ul>
       </article>
     </section>`
-  }) //map the ingredients to a list, then join them because map returns an array and we want a string
+  })
 }
 
 const getSelectedDiets = () => {
@@ -218,22 +230,27 @@ const getSelectedDiets = () => {
 
 const getSelectedCost = () => {
   const selectedCheckCost = document.querySelector('input[name="cost"]:checked')
-  const costCheckboxes = document.querySelectorAll('input[name="cost"]') //changed from radio the checkbox, gathers all
-
-  costCheckboxes.forEach(checkbox => {
-    checkbox.addEventListener("change", function () {
-      if (this.checked) { //if the current document.queryselectorall with name cost is selected, uncheck all others
-        costCheckboxes.forEach(cb => {
-          if (cb !== this) cb.checked = false; // Uncheck all others
-        })
-      }
-    })
-  })
 
   if (selectedCheckCost) {
     return selectedCheckCost.value
   } //turn cost value as a number
 }
+
+
+const costCheckboxes = document.querySelectorAll('input[name="cost"]') //changed from radio the checkbox, gathers all
+
+costCheckboxes.forEach(checkbox => {
+  checkbox.addEventListener("change", function () {
+    if (this.checked) { //if the current document.queryselectorall with name cost is selected, uncheck all others
+      costCheckboxes.forEach(cb => {
+        if (cb !== this) cb.checked = false; // Uncheck all others
+      })
+    }
+    updateRecipes(); // Update recipes immediately after change
+  })
+})
+
+
 
 const getSelectedTime = () => {
   const selectedRadioTime = document.querySelector('input[name="time"]:checked')
@@ -248,7 +265,7 @@ const updateRecipes = () => {
   let selectedCost = getSelectedCost()
   let selectedTime = getSelectedTime()
 
-  let filteredRecipes = recipes.filter(recipe =>
+  let filteredRecipes = fetchedRecipe.filter(recipe =>
     selectedDiets.some(diet => recipe.diets.includes(diet)) //if the recipe has any of the selected diets it will be included in the filteredRecipes array
     // used selectedDiets.every before, but that would result in no recipes being shown if more than one diet was selected and i don't know why
   )
@@ -308,5 +325,41 @@ randomButton.addEventListener("click", () => {
   loadRecipes(randomRecipe)
 })
 
-loadRecipes(recipes) //load default recipes
+//loadRecipes(storedRecipes) //load default recipes
 
+const fetchData = async () => {
+  let storedRecipes = localStorage.getItem("recipes");
+
+  //  Ensure storedRecipes is always an array
+  storedRecipes = storedRecipes ? JSON.parse(storedRecipes) : [];
+
+  if (storedRecipes.length === 0) { // Only fetch if no recipe is stored
+    try {
+      const response = await fetch(URLExtended)
+      const fetchedRecipe = await response.json()
+      //const validResponse = fetchedRecipe.recipes.filter(recipe => {
+      //  return recipe.extendedIngredients.length > 0 && recipe.image && recipe.title && recipe.diets === "vegetarian" || "vegan" || "dairy-free" || "gluten-free"
+      //})
+
+      storedRecipes = localStorage.setItem("recipes", JSON.stringify(fetchedRecipe)) // Store as an array
+
+      console.log("Fetched and stored recipe:", fetchedRecipe)
+      loadRecipes(fetchedRecipe)
+    } catch (error) {
+      console.error("Error fetching recipe:", error)
+    }
+  }
+  else {
+    console.log("Recipe already stored:", storedRecipes)
+    loadRecipes(storedRecipes)
+  }
+}
+
+fetchData()
+
+
+
+
+
+
+//TO ADD: Dyanmic apis, local storage, only load a certain amount, fetch new recipes - pagination,
