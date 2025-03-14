@@ -20,6 +20,7 @@ const randomButton = document.getElementById("randomize")
 
 let loadedRecipeCount = 8
 const batchSize = 8
+let apiPoints = 0
 
 //the recipe in html
 const loadRecipes = (recipeObject) => {
@@ -149,40 +150,50 @@ const fetchData = async () => {
   let uniqueRecipes = []
   let seenIds = {}
 
-  try {
+  if (loadedRecipeCount < 24) {
+    try {
 
-    const response = await fetch(URLExtended)
-    let fetchedRecipes = await response.json()
+      const response = await fetch(URLExtended)
+      let fetchedRecipes = await response.json()
 
-    if (fetchedRecipes.results.length > 0) {
-      for (let i = 0; i < fetchedRecipes.results.length; i++) {
-        let recipe = fetchedRecipes.results[i] // Get the current recipe
-        storedRecipes.push(recipe) // Add it to the storedRecipes array
-      }
-
-      for (let i = 0; i < storedRecipes.length; i++) {
-        let recipe = storedRecipes[i]
-
-        if (!seenIds[recipe.id]) { // If this recipe ID hasn't been added yet
-          seenIds[recipe.id] = true // Mark it as seen
-          uniqueRecipes.push(recipe) // Add to the list
+      if (fetchedRecipes.results.length > 0) {
+        for (let i = 0; i < fetchedRecipes.results.length; i++) {
+          let recipe = fetchedRecipes.results[i] // Get the current recipe
+          storedRecipes.push(recipe) // Add it to the storedRecipes array
         }
+
+        for (let i = 0; i < storedRecipes.length; i++) {
+          let recipe = storedRecipes[i]
+
+          if (!seenIds[recipe.id]) { // If this recipe ID hasn't been added yet
+            seenIds[recipe.id] = true // Mark it as seen
+            uniqueRecipes.push(recipe) // Add to the list
+          }
+        }
+
+        storedRecipes = uniqueRecipes
+
+        localStorage.setItem("recipes", JSON.stringify(storedRecipes)) //!!!!!!!!
+
+        loadedRecipeCount += batchSize
+        updateRecipes()
       }
-
-      storedRecipes = uniqueRecipes
-
-      localStorage.setItem("recipes", JSON.stringify(storedRecipes)) //!!!!!!!!
-
-      loadedRecipeCount += batchSize
-      updateRecipes()
+      else {
+        console.log("no new recipes")
+      }
     }
-    else {
-      console.log("no new recipes")
+
+    catch (error) {
+
+      console.error("Error fetching recipes:", error)
     }
   }
-  catch (error) {
-
-    console.error("Error fetching recipes:", error)
+  else {
+    container.innerHTML += `
+    <a class="card-holder">
+      <h2>Limit reached</h2>
+    </a>
+  `
   }
 
 }
@@ -217,9 +228,8 @@ const initialLoad = async () => {
 }
 
 
-window.addEventListener("scroll", checkScroll);
-window.addEventListener("resize", checkScroll);
-document.addEventListener("DOMContentLoaded", initialLoad);
+window.addEventListener("scroll", checkScroll)
+document.addEventListener("DOMContentLoaded", initialLoad)
 //event listeners that active on page load, resize, or scroll, to fetch recipes, as well a fetching or loading recipes
 
 // Listen for changes on checkboxes
@@ -256,4 +266,5 @@ randomButton.addEventListener("click", () => {
 
 
 //ISSUES: not all diets are included in fetch, only the first "vegan" is. Could be that it loads all vegan recipes before moving to the next one. how to fix?
+//ISSUE: recipes resetting and not loading from localstorage?
 //ADD: create a limit for how many recipes can be fetched, or all 150, then display am essage to indicate that
