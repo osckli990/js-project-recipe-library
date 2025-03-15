@@ -21,8 +21,7 @@ const loader = document.getElementById("loader")
 const spinner = document.getElementById("spinner")
 
 let loadedRecipeCount = 8
-//const batchSize = 8
-let apiPoints = 0
+const batchSize = 8
 
 //the recipe in html
 const loadRecipes = (recipeObject) => {
@@ -31,10 +30,7 @@ const loadRecipes = (recipeObject) => {
   recipeObject.forEach(recipe => {
 
     container.innerHTML += `
-    <a class="card-holder" href="${recipe.sourceUrl}">
-      <section
-        id="${recipe.id}"
-      >
+    <a class="card-holder" href="${recipe.sourceUrl}" id="${recipe.id}">
         <picture>
           <img src="${recipe.image}">
         </picture>
@@ -48,7 +44,7 @@ const loadRecipes = (recipeObject) => {
             Cost:
           </h3>
           <p>
-          ${recipe.pricePerServing} $
+          ${Math.floor(recipe.pricePerServing / 10)} $
           </p>
           <h3>
             Time:
@@ -62,10 +58,9 @@ const loadRecipes = (recipeObject) => {
             Ingredients:
           </h3>
           <ul>
-          ${recipe.nutrition.ingredients.map(ingredient => `<li>${ingredient.name}</li>`).join('')}
+          ${recipe.nutrition.ingredients.map(ingredient => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}
           </ul>
         </article>
-      </section>
     </a>`
   })// creates a list of ingredients, where the name is nested in layers of objects and arrays
 }
@@ -91,14 +86,14 @@ const updateRecipes = () => {
     if (checkbox.checked) {
       selectedDiets.push(checkbox.id)
     }
-  });
+  })
 
   let selectedCost = null
   costMix.forEach(checkbox => {
     if (checkbox.checked) {
       selectedCost = checkbox.value
     }
-  });
+  })
 
   let selectedTime = Infinity //large number to load all recipes withing a realistic cooking time
   timeMix.forEach(radiobutton => {
@@ -143,19 +138,11 @@ const updateRecipes = () => {
   //loadRecipes(filteredRecipes)
 }
 
-function displayLoading() {
-  loader.classList.add("display")
-  spinner.classList.add("display-two")
-  setTimeout(() => {
-    loader.classList.remove("display")
-    spinner.classList.remove("display-two")
-  }, 3000);
-}
-
 const fetchData = async () => {
   const apiKey = "320b154c621249e194a24f0ee7f4ec7b"
-  const includedDiets = ['vegan|vegetarian|gluten free|dairy free'];
-  const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${loadedRecipeCount}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true`
+  const includedDiets = ['vegan|vegetarian|gluten free|dairy free']
+  const readyTime = 200
+  const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${loadedRecipeCount}&diet=${includedDiets}&maxReadyTime=${readyTime}&addRecipeInformation=true&addRecipeNutrition=true&instructionsRequired=true`
   //titel and image always included? yes. but bad image quality, how to fix?
   //complex search to include everything i want instead of getting 20 recipes and only being able to use 3. addnutrition to get ingredients
 
@@ -166,11 +153,15 @@ const fetchData = async () => {
 
   if (loadedRecipeCount < 24) { //amount of recipes i can load with the complexsearch is about 100, before reaching API limit, due to points. could not figure out the amount of points used by each request
     try {
-      if (loadedRecipeCount > 8) { //display only after the first fetch, which happens seemingly instantly
-        displayLoading() //put that bitch in timeout
-      }
+      loader.classList.add("display")
+      spinner.classList.add("display-spinner")
+
       const response = await fetch(URLExtended)
       let fetchedRecipes = await response.json()
+
+      loader.classList.remove("display")
+      spinner.classList.remove("display-spinner")
+      //API seems to be fast enough to not display the spinner and loader?
 
       if (fetchedRecipes.results.length > 0) {
         for (let i = 0; i < fetchedRecipes.results.length; i++) {

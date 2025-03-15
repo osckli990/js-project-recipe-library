@@ -106,7 +106,7 @@ h2 {
 
 .card-holder {
   border-radius: 5px;
-  box-shadow: 0px 0px 2px 1px rgb(48, 48, 48);
+  box-shadow: 0px 0px 10px 1px rgb(48, 48, 48);
   padding: 20px 20px;
   width: 80%;
   border: 2px solid white;
@@ -117,14 +117,18 @@ h2 {
 }
 
 #loader {
-  height: 200px;
-  border-radius: 5px;
+  border-radius: 50%;
+  height: 150px;
   box-shadow: 0px 0px 2px 1px rgb(48, 48, 48);
   padding: 20px 20px;
-  width: 80%;
-  border: 2px solid white;
-  margin: 20px 0;
+  width: 150px;
+  background-color: white;
+  border: 2px solid black;
   display: none;
+  position: absolute;
+  top: 40%;
+  left: 40%;
+  z-index: 99;
 }
 
 #loader.display {
@@ -142,7 +146,7 @@ h2 {
   display: none;
 }
 
-#spinner.display-two {
+#spinner.display-spinner {
   display: block;
 }
 
