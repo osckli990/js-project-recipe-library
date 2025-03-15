@@ -213,11 +213,31 @@ const fetchData = async () => {
 function checkScroll() {
   let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [] //call upon localStorage
 
+  let selectedTime = timeMix.find(radio => radio.checked)?.value //?.value to not crash when returning "undefined", which we get if no radio is selected
+
+  // Check if any filters or sorting options are selected
+  const isFiltered =
+    checkMix.some(checkbox => checkbox.checked) || // Diet filters
+    costMix.some(checkbox => checkbox.checked) || // Cost sorting
+    (selectedTime && selectedTime === "60") // Only block if time is selected & NOT "60-min"
+
   // Check if we've loaded all recipes from localStorage
   const displayedRecipes = container.querySelectorAll(".card-holder").length // Count how many are currently displayed
 
   if (window.innerHeight + window.scrollY >= document.body.offsetHeight) { //only trigger when at the bottom of browser screen
     console.log("Reached bottom!")
+
+    if (isFiltered) {
+      console.log("Skipping fetch due to active filters/sorting.")
+      if (!document.getElementById("sorting-enabled")) {
+        container.innerHTML += `
+        <a class="card-holder" id="sorting-enabled">
+          <h2>No new recipes loaded do to sorting being selected</h2>
+        </a>
+      `
+      }
+      return // Don't fetch more recipes if filters are active
+    }
 
     if (displayedRecipes < storedRecipes.length) { //only fetch more if we haven't loaded all available
       console.log("Loading more from storage...")
