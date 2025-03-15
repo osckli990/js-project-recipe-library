@@ -21,7 +21,7 @@ const loader = document.getElementById("loader")
 const spinner = document.getElementById("spinner")
 
 let loadedRecipeCount = 8
-const batchSize = 8
+//const batchSize = 8
 let apiPoints = 0
 
 //the recipe in html
@@ -286,6 +286,3 @@ randomButton.addEventListener("click", () => {
   const randomRecipe = [storedRecipes[randomIndex]]
   loadRecipes(randomRecipe)
 })
-
-
-//ADD: create a limit for how many recipes can be fetched, or all 150, then display am essage to indicate that. USE api points
