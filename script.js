@@ -1,8 +1,8 @@
 const checkMix = [ //checkbox
   document.getElementById("vegan"),
   document.getElementById("vegetarian"),
-  document.getElementById("gluten-free"),
-  document.getElementById("dairy-free")
+  document.getElementById("gluten free"),
+  document.getElementById("dairy free")
 ]
 const costMix = [ //switched to checkbox to be able to sort based on time while unchecked, otherwise these takes presidence
   document.getElementById("low-cost"),
@@ -17,6 +17,8 @@ const timeMix = [ //radio
 
 const container = document.getElementById("recipeHolder")
 const randomButton = document.getElementById("randomize")
+const loader = document.getElementById("loader")
+const spinner = document.getElementById("spinner")
 
 let loadedRecipeCount = 8
 const batchSize = 8
@@ -121,7 +123,7 @@ const updateRecipes = () => {
   } else if (selectedCost === "high") {
     filteredRecipes.sort((a, b) => b.pricePerServing - a.pricePerServing) //highest to lowest
   } else if (selectedTime !== null) {
-    filteredRecipes.sort((a, b) => a.readyInMinutes - b.readyInMinutes); // Fastest first
+    filteredRecipes.sort((a, b) => a.readyInMinutes - b.readyInMinutes) // Fastest first
     //could be an "else" only?
   }
 
@@ -135,13 +137,25 @@ const updateRecipes = () => {
     return // Exit the function to prevent loadRecipes from being called. super proud of this one
   }
 
-  loadRecipes(filteredRecipes)
+  let recipesToDisplay = filteredRecipes.slice(0, loadedRecipeCount)
+  loadRecipes(recipesToDisplay)
+
+  //loadRecipes(filteredRecipes)
+}
+
+function displayLoading() {
+  loader.classList.add("display")
+  spinner.classList.add("display-two")
+  setTimeout(() => {
+    loader.classList.remove("display")
+    spinner.classList.remove("display-two")
+  }, 3000);
 }
 
 const fetchData = async () => {
   const apiKey = "320b154c621249e194a24f0ee7f4ec7b"
   const includedDiets = ['vegan|vegetarian|gluten free|dairy free'];
-  const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${batchSize}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true`
+  const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${loadedRecipeCount}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true`
   //titel and image always included? yes. but bad image quality, how to fix?
   //complex search to include everything i want instead of getting 20 recipes and only being able to use 3. addnutrition to get ingredients
 
@@ -150,9 +164,11 @@ const fetchData = async () => {
   let uniqueRecipes = []
   let seenIds = {}
 
-  if (loadedRecipeCount < 24) {
+  if (loadedRecipeCount < 24) { //amount of recipes i can load with the complexsearch is about 100, before reaching API limit, due to points. could not figure out the amount of points used by each request
     try {
-
+      if (loadedRecipeCount > 8) { //display only after the first fetch, which happens seemingly instantly
+        displayLoading() //put that bitch in timeout
+      }
       const response = await fetch(URLExtended)
       let fetchedRecipes = await response.json()
 
@@ -173,9 +189,11 @@ const fetchData = async () => {
 
         storedRecipes = uniqueRecipes
 
-        localStorage.setItem("recipes", JSON.stringify(storedRecipes)) //!!!!!!!!
+        localStorage.setItem("recipes", JSON.stringify(storedRecipes)) //saves to localstorage who can only store strings. we then use this localstorage alot
 
         loadedRecipeCount += batchSize
+        console.log(storedRecipes)
+        console.log(loadedRecipeCount)
         updateRecipes()
       }
       else {
@@ -188,28 +206,34 @@ const fetchData = async () => {
       console.error("Error fetching recipes:", error)
     }
   }
-  else { //
-    container.innerHTML += `
-    <a class="card-holder">
-      <h2>Limit reached</h2>
-    </a>
-  `
+  else {
+    if (!document.getElementById("limit-message")) {
+      container.innerHTML += `
+      <a class="card-holder" id="limit-message">
+        <h2>Limit reached</h2>
+      </a>
+    `
+    }
   }
-
 }
 
 
+
 function checkScroll() {
-  let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || []
+  let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [] //call upon localStorage
 
   // Check if we've loaded all recipes from localStorage
   const displayedRecipes = container.querySelectorAll(".card-holder").length // Count how many are currently displayed
 
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 50) { //only trigger when at the bottom of browser screen, with offset of 50
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) { //only trigger when at the bottom of browser screen
+    console.log("Reached bottom!")
+
     if (displayedRecipes < storedRecipes.length) { //only fetch more if we haven't loaded all available
+      console.log("Loading more from storage...")
       loadRecipes(storedRecipes.slice(0, displayedRecipes + batchSize)) //load more recipes
     }
     else {
+      console.log("Fetching new data...")
       fetchData()
     }
   }
@@ -230,7 +254,7 @@ const initialLoad = async () => {
 
 window.addEventListener("scroll", checkScroll)
 document.addEventListener("DOMContentLoaded", initialLoad)
-//event listeners that active on page load, resize, or scroll, to fetch recipes, as well a fetching or loading recipes
+//event listeners that active on page load, or scroll, to fetch recipes, as well a fetching or loading recipes
 
 // Listen for changes on checkboxes
 checkMix.forEach(checkbox => {
@@ -264,7 +288,4 @@ randomButton.addEventListener("click", () => {
 })
 
 
-
-//ISSUES: not all diets are included in fetch, only the first "vegan" is. Could be that it loads all vegan recipes before moving to the next one. how to fix?
-//ISSUE: recipes resetting and not loading from localstorage?
-//ADD: create a limit for how many recipes can be fetched, or all 150, then display am essage to indicate that
+//ADD: create a limit for how many recipes can be fetched, or all 150, then display am essage to indicate that. USE api points

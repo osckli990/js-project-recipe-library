@@ -116,6 +116,36 @@ h2 {
 
 }
 
+#loader {
+  height: 200px;
+  border-radius: 5px;
+  box-shadow: 0px 0px 2px 1px rgb(48, 48, 48);
+  padding: 20px 20px;
+  width: 80%;
+  border: 2px solid white;
+  margin: 20px 0;
+  display: none;
+}
+
+#loader.display {
+  display: flex;
+}
+
+#spinner {
+  justify-content: center;
+  align-items: center;
+  background-color: black;
+  height: 10px;
+  width: 100px;
+  margin: auto;
+  animation: spin 1s infinite linear;
+  display: none;
+}
+
+#spinner.display-two {
+  display: block;
+}
+
 .card-holder:hover {
   border: 2px solid #0018A4;
 }
@@ -150,6 +180,16 @@ img {
   list-style-type: none;
   margin: 0;
   padding: 0;
+}
+
+@keyframes spin {
+  from {
+    transform: rotate(0deg);
+  }
+
+  to {
+    transform: rotate(360deg);
+  }
 }
 
 @media (min-width: 470px) {
