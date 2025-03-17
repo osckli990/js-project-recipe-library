@@ -132,8 +132,7 @@ const updateRecipes = () => {
     return // Exit the function to prevent loadRecipes from being called. super proud of this one
   }
 
-  let recipesToDisplay = filteredRecipes.slice(0, loadedRecipeCount)
-  loadRecipes(recipesToDisplay)
+  loadRecipes(filteredRecipes)
 
   //loadRecipes(filteredRecipes)
 }
@@ -219,7 +218,7 @@ function checkScroll() {
   const isFiltered =
     checkMix.some(checkbox => checkbox.checked) || // Diet filters
     costMix.some(checkbox => checkbox.checked) || // Cost sorting
-    (selectedTime && selectedTime === "60") // Only block if time is selected & NOT "60-min"
+    (selectedTime && selectedTime === "60") // Only block if time is selected & not "60-min"
 
   // Check if we've loaded all recipes from localStorage
   const displayedRecipes = container.querySelectorAll(".card-holder").length // Count how many are currently displayed
