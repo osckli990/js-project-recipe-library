@@ -150,7 +150,7 @@ const fetchData = async () => {
   let uniqueRecipes = []
   let seenIds = {}
 
-  if (loadedRecipeCount < 24) { //amount of recipes i can load with the complexsearch is about 100, before reaching API limit, due to points. could not figure out the amount of points used by each request
+  if (loadedRecipeCount < 100) { //amount of recipes i can load with the complexsearch is about 100, before reaching API limit, due to points. could not figure out the amount of points used by each request
     try {
       loader.classList.add("display")
       spinner.classList.add("display-spinner")
@@ -212,13 +212,13 @@ const fetchData = async () => {
 function checkScroll() {
   let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [] //call upon localStorage
 
-  let selectedTime = timeMix.find(radio => radio.checked)?.value //?.value to not crash when returning "undefined", which we get if no radio is selected
+  let selectedTime = timeMix.find(radio => radio.checked).value
 
   // Check if any filters or sorting options are selected
   const isFiltered =
     checkMix.some(checkbox => checkbox.checked) || // Diet filters
     costMix.some(checkbox => checkbox.checked) || // Cost sorting
-    (selectedTime && selectedTime === "60") // Only block if time is selected & not "60-min"
+    (selectedTime && selectedTime !== "200") // Only block if time is selected & not "60-min"
 
   // Check if we've loaded all recipes from localStorage
   const displayedRecipes = container.querySelectorAll(".card-holder").length // Count how many are currently displayed
