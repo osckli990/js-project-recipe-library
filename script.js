@@ -296,3 +296,9 @@ randomButton.addEventListener("click", () => {
   const randomRecipe = [storedRecipes[randomIndex]]
   loadRecipes(randomRecipe)
 })
+
+
+
+
+
+//ADD: Convert decimal ingredient amounts to fractions!!!!
