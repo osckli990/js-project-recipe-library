@@ -23,6 +23,40 @@ const spinner = document.getElementById("spinner")
 let loadedRecipeCount = 8
 const batchSize = 8
 
+const decimalToFraction = (decimal) => {
+  if (decimal >= 1) {
+    return decimal
+  }
+
+  const tolerance = 1.0E-6  // Precision tolerance
+  let numerator = decimal
+  let denominator = 1
+
+  while (Math.abs(numerator - Math.round(numerator)) > tolerance) {
+    numerator *= 10
+    denominator *= 10
+  }
+
+  const gcd = (a, b) => {
+    while (b !== 0) {
+      let temp = b
+      b = a % b
+      a = temp
+    }
+    return a
+  }
+
+  const divisor = gcd(numerator, denominator)
+  numerator /= divisor
+  denominator /= divisor
+
+  if (numerator === denominator) {
+    return '1';
+  }
+
+  return `${numerator}/${denominator}`
+} //chatGPT function to convert to simple fraction instead of relying on an external library. so 0.27 -> 1/3. which mostly works but sometimes results in weird amounts like 200/2
+
 //the recipe in html
 const loadRecipes = (recipeObject) => {
   container.innerHTML = '' //resets the container before we load the recipes
@@ -44,7 +78,7 @@ const loadRecipes = (recipeObject) => {
             Cost:
           </h3>
           <p>
-          ${Math.floor(recipe.pricePerServing / 10)} $
+          ${Math.floor(recipe.pricePerServing / 10)} $ 
           </p>
           <h3>
             Time:
@@ -58,11 +92,14 @@ const loadRecipes = (recipeObject) => {
             Ingredients:
           </h3>
           <ul>
-          ${recipe.nutrition.ingredients.map(ingredient => `<li>${ingredient.amount} ${ingredient.unit} ${ingredient.name}</li>`).join('')}
+          ${recipe.nutrition.ingredients.map(ingredient => {
+      const fraction = decimalToFraction(ingredient.amount);
+      return `<li>${fraction} ${ingredient.unit} ${ingredient.name}</li>`
+    }).join('')}
           </ul>
         </article>
     </a>`
-  })// creates a list of ingredients, where the name is nested in layers of objects and arrays
+  })// creates a list of ingredients, where the name is nested in layers of objects and arrays. math floor to get reasonable values
 }
 
 const costCheckboxes = document.querySelectorAll('input[name="cost"]') //changed from radio the checkbox, gathers all
@@ -131,7 +168,7 @@ const updateRecipes = () => {
     `
     return // Exit the function to prevent loadRecipes from being called. super proud of this one
   }
-
+  console.log(filteredRecipes)
   loadRecipes(filteredRecipes)
 
   //loadRecipes(filteredRecipes)
@@ -158,6 +195,7 @@ const fetchData = async () => {
       const response = await fetch(URLExtended)
       let fetchedRecipes = await response.json()
 
+      console.log(fetchedRecipes)
       loader.classList.remove("display")
       spinner.classList.remove("display-spinner")
       //API seems to be fast enough to not display the spinner and loader?
