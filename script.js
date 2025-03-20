@@ -25,37 +25,26 @@ const batchSize = 8
 
 const decimalToFraction = (decimal) => {
   if (decimal >= 1) {
-    return decimal
+    return decimal.toString();
   }
 
-  const tolerance = 1.0E-6  // Precision tolerance
-  let numerator = decimal
-  let denominator = 1
+  const commonDenominators = [2, 3, 4, 5, 6, 8, 10, 12] // use only these denominators, creating more inaccurate, but smaller and actually usable fractions
+  let bestFraction = { numerator: 1, denominator: 1, error: Infinity }
 
-  while (Math.abs(numerator - Math.round(numerator)) > tolerance) {
-    numerator *= 10
-    denominator *= 10
-  }
+  for (let denom of commonDenominators) {
+    let num = Math.round(decimal * denom)
+    let error = Math.abs(decimal - num / denom)
 
-  const gcd = (a, b) => {
-    while (b !== 0) {
-      let temp = b
-      b = a % b
-      a = temp
+    if (error < bestFraction.error) {
+      bestFraction = { numerator: num, denominator: denom, error }
     }
-    return a
   }
 
-  const divisor = gcd(numerator, denominator)
-  numerator /= divisor
-  denominator /= divisor
+  return bestFraction.numerator === bestFraction.denominator
+    ? '1'
+    : `${bestFraction.numerator}/${bestFraction.denominator}`
+}
 
-  if (numerator === denominator) {
-    return '1';
-  }
-
-  return `${numerator}/${denominator}`
-} //chatGPT function to convert to simple fraction instead of relying on an external library. so 0.27 -> 1/3. 
 
 //the recipe in html
 const loadRecipes = (recipeObject) => {
@@ -115,133 +104,73 @@ costCheckboxes.forEach(checkbox => {
   })
 })
 
+//redone updateRecipes using .filter, .map and ternary operator
 const updateRecipes = () => {
   let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || []
 
-  let selectedDiets = []
-  checkMix.forEach(checkbox => {
-    if (checkbox.checked) {
-      selectedDiets.push(checkbox.id)
-    }
-  })
+  let selectedDiets = checkMix
+    .filter(checkbox => checkbox.checked)
+    .map(checkbox => checkbox.id)
 
-  let selectedCost = null
-  costMix.forEach(checkbox => {
-    if (checkbox.checked) {
-      selectedCost = checkbox.value
-    }
-  })
-
-  let selectedTime = Infinity //large number to load all recipes withing a realistic cooking time
-  timeMix.forEach(radiobutton => {
-    if (radiobutton.checked) {
-      selectedTime = parseInt(radiobutton.value)
-    }
-  })
+  // Get selected cost filter (low or high), defaulting to null if none are selected
+  let selectedCost = costMix.find(checkbox => checkbox.checked)?.value || null
+  // Get selected time filter (convert to a number, defaulting to Infinity if none are selected)
+  let selectedTime = Number(timeMix.find(radio => radio.checked)?.value) || Infinity
 
   let filteredRecipes = storedRecipes.filter(recipe =>
-    selectedDiets.some(diet => recipe.diets.includes(diet)) //if the recipe has any of the selected diets it will be included in the filteredRecipes array
-    // used selectedDiets.every before, but that would result in no recipes being shown if more than one diet was selected and i don't know why
-  )
+    selectedDiets.length === 0 || selectedDiets.some(diet => recipe.diets.includes(diet))
+  ).filter(recipe => recipe.readyInMinutes <= selectedTime);
 
-  if (selectedDiets.length === 0) {
-    filteredRecipes = storedRecipes //if no diets are selected, show all recipes
+  if (selectedCost) {
+    filteredRecipes.sort((a, b) =>
+      selectedCost === "low" ? a.pricePerServing - b.pricePerServing :
+        selectedCost === "high" ? b.pricePerServing - a.pricePerServing :
+          a.readyInMinutes - b.readyInMinutes
+    )
   }
 
-  filteredRecipes = filteredRecipes.filter(recipe => recipe.readyInMinutes <= selectedTime)
-
-  if (selectedCost === "low") {
-    filteredRecipes.sort((a, b) => a.pricePerServing - b.pricePerServing) //lowest to highest
-  } else if (selectedCost === "high") {
-    filteredRecipes.sort((a, b) => b.pricePerServing - a.pricePerServing) //highest to lowest
-  } else if (selectedTime !== null) {
-    filteredRecipes.sort((a, b) => a.readyInMinutes - b.readyInMinutes) // Fastest first
-    //could be an "else" only?
+  // If there are valid recipes after filtering, display them
+  if (filteredRecipes.length) {
+    loadRecipes(filteredRecipes) // Loads the recipes properly
+  } else {
+    container.innerHTML = `<a class="card-holder"><h2>No valid recipes</h2></a>`
   }
-
-
-  if (filteredRecipes.length === 0) { //once filteredRecipes reaches this part and contains no valid recipes, we simply display this message. a simple spell, yet quite unbreakable
-    container.innerHTML = `
-      <a class="card-holder">
-        <h2>No valid recipes</h2>
-      </a>
-    `
-    return // Exit the function to prevent loadRecipes from being called. super proud of this one
-  }
-  console.log(filteredRecipes)
-  loadRecipes(filteredRecipes)
-
-  //loadRecipes(filteredRecipes)
 }
 
 const fetchData = async () => {
-  const apiKey = "320b154c621249e194a24f0ee7f4ec7b"
-  const includedDiets = ['vegan|vegetarian|gluten free|dairy free']
-  const readyTime = 200
-  const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${loadedRecipeCount}&diet=${includedDiets}&maxReadyTime=${readyTime}&addRecipeInformation=true&addRecipeNutrition=true&instructionsRequired=true`
-  //titel and image always included? yes. but bad image quality, how to fix?
-  //complex search to include everything i want instead of getting 20 recipes and only being able to use 3. addnutrition to get ingredients
+  const apiKey = "320b154c621249e194a24f0ee7f4ec7b";
+  const includedDiets = "vegan|vegetarian|gluten free|dairy free";
+  const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${loadedRecipeCount}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true&instructionsRequired=true`;
 
-  let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [] //if null or undefined, create instead an empty array as placeholder
-  //localStorage is always a string, so JSON.parse converts it to an array
-  let uniqueRecipes = []
-  let seenIds = {}
-
-  if (loadedRecipeCount < 100) { //amount of recipes i can load with the complexsearch is about 100, before reaching API limit, due to points. could not figure out the amount of points used by each request
-    try {
-      loader.classList.add("display")
-      spinner.classList.add("display-spinner")
-
-      const response = await fetch(URLExtended)
-      let fetchedRecipes = await response.json()
-
-      console.log(fetchedRecipes)
-      loader.classList.remove("display")
-      spinner.classList.remove("display-spinner")
-      //API seems to be fast enough to not display the spinner and loader?
-
-      if (fetchedRecipes.results.length > 0) {
-        for (let i = 0; i < fetchedRecipes.results.length; i++) {
-          let recipe = fetchedRecipes.results[i] // Get the current recipe
-          storedRecipes.push(recipe) // Add it to the storedRecipes array
-        }
-
-        for (let i = 0; i < storedRecipes.length; i++) {
-          let recipe = storedRecipes[i]
-
-          if (!seenIds[recipe.id]) { // If this recipe ID hasn't been added yet
-            seenIds[recipe.id] = true // Mark it as seen
-            uniqueRecipes.push(recipe) // Add to the list
-          }
-        }
-
-        storedRecipes = uniqueRecipes
-
-        localStorage.setItem("recipes", JSON.stringify(storedRecipes)) //saves to localstorage who can only store strings. we then use this localstorage alot
-
-        loadedRecipeCount += batchSize
-        console.log(storedRecipes)
-        console.log(loadedRecipeCount)
-        updateRecipes()
-      }
-      else {
-        console.log("no new recipes")
-      }
-    }
-
-    catch (error) {
-
-      console.error("Error fetching recipes:", error)
-    }
-  }
-  else {
+  if (loadedRecipeCount >= 100) {
     if (!document.getElementById("limit-message")) {
-      container.innerHTML += `
-      <a class="card-holder" id="limit-message">
-        <h2>Limit reached</h2>
-      </a>
-    `
+      container.innerHTML += `<a class="card-holder" id="limit-message">Limit reached</a>`
     }
+    return
+  }
+
+  try {
+    loader.classList.add("display")
+    spinner.classList.add("display-spinner")
+
+    const response = await fetch(URLExtended)
+    const { results = [] } = await response.json()
+
+    loader.classList.remove("display")
+    spinner.classList.remove("display-spinner")
+
+    if (!results.length) return console.log("No new recipes")
+
+    let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || []
+    let uniqueRecipes = [...new Map([...storedRecipes, ...results].map(r => [r.id, r])).values()]
+    //this one is a doosy. storedRecipes and results are combined and mapped by looping through recipe (r) and creating pairs, and new Map store unique recipe id's, which removes duplicate recipes. .values only takes out the recipe objects and the first ... converts the map back into a usable array. Damn, i need a lecture in spread operators
+
+    localStorage.setItem("recipes", JSON.stringify(uniqueRecipes))
+    loadedRecipeCount += batchSize
+
+    updateRecipes()
+  } catch (error) {
+    console.error("Error fetching recipes:", error)
   }
 }
 
