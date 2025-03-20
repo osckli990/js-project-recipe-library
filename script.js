@@ -55,7 +55,7 @@ const decimalToFraction = (decimal) => {
   }
 
   return `${numerator}/${denominator}`
-} //chatGPT function to convert to simple fraction instead of relying on an external library. so 0.27 -> 1/3. which mostly works but sometimes results in weird amounts like 200/2
+} //chatGPT function to convert to simple fraction instead of relying on an external library. so 0.27 -> 1/3. 
 
 //the recipe in html
 const loadRecipes = (recipeObject) => {
