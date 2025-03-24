@@ -186,6 +186,8 @@ function checkScroll() {
     checkMix.some(checkbox => checkbox.checked) || // Diet filters
     costMix.some(checkbox => checkbox.checked) || // Cost sorting
     (selectedTime && selectedTime !== "200") // Only block if time is selected & not "60-min"
+  //duplicate line?
+
 
   // Check if we've loaded all recipes from localStorage
   const displayedRecipes = container.querySelectorAll(".card-holder").length // Count how many are currently displayed
