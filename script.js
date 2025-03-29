@@ -23,6 +23,7 @@ const spinner = document.getElementById("spinner")
 let loadedRecipeCount = 8
 const batchSize = 8
 let apiLimitReached = false
+let isFetching = false
 
 const decimalToFraction = (decimal) => {
   if (decimal >= 1) {
@@ -189,6 +190,8 @@ const fetchData = async () => {
 
 
 const checkScroll = async () => {
+  if (isFetching) return //prevent multiple api calls
+
   let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [] //call upon localStorage
 
   let selectedTime = timeMix.find(radio => radio.checked).value
@@ -217,10 +220,12 @@ const checkScroll = async () => {
     }
 
     if (displayedRecipes < storedRecipes.length) { //only fetch more if we haven't loaded all available
-      loadRecipes(storedRecipes.slice(0, displayedRecipes + batchSize)) //load more recipes
+      loadRecipes(storedRecipes.slice(displayedRecipes, displayedRecipes + batchSize)) //load more recipes
     }
     else if (!apiLimitReached) {
+      isFetching = true
       fetchData()
+      isFetching = false
     }
   }
 }
@@ -272,9 +277,3 @@ randomButton.addEventListener("click", () => {
   const randomRecipe = [storedRecipes[randomIndex]]
   loadRecipes(randomRecipe)
 })
-
-
-
-
-
-//ADD: Convert decimal ingredient amounts to fractions!!!!
