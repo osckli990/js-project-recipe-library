@@ -22,6 +22,7 @@ const spinner = document.getElementById("spinner")
 
 let loadedRecipeCount = 8
 const batchSize = 8
+let apiLimitReached = false
 
 const decimalToFraction = (decimal) => {
   if (decimal >= 1) {
@@ -117,9 +118,12 @@ const updateRecipes = () => {
   // Get selected time filter (convert to a number, defaulting to Infinity if none are selected)
   let selectedTime = Number(timeMix.find(radio => radio.checked)?.value) || Infinity
 
-  let filteredRecipes = storedRecipes.filter(recipe =>
-    selectedDiets.length === 0 || selectedDiets.some(diet => recipe.diets.includes(diet))
-  ).filter(recipe => recipe.readyInMinutes <= selectedTime);
+  let filteredRecipes = storedRecipes
+    .filter(recipe => Array.isArray(recipe.diets) && recipe.diets.length > 0) // Exclude recipes without diets
+    .filter(recipe =>
+      selectedDiets.length === 0 || selectedDiets.every(diet => recipe.diets.map(d => d.toLowerCase()).includes(diet))
+    )
+    .filter(recipe => recipe.readyInMinutes <= selectedTime)
 
   if (selectedCost) {
     filteredRecipes.sort((a, b) =>
@@ -138,28 +142,36 @@ const updateRecipes = () => {
 }
 
 const fetchData = async () => {
+  if (apiLimitReached) return // Stop fetching if API limit reached
+
   const apiKey = "320b154c621249e194a24f0ee7f4ec7b";
   const includedDiets = "vegan|vegetarian|gluten free|dairy free";
   const URLExtended = `https://api.spoonacular.com/recipes/complexSearch?apiKey=${apiKey}&number=${loadedRecipeCount}&diet=${includedDiets}&maxReadyTime=200&addRecipeInformation=true&addRecipeNutrition=true&instructionsRequired=true`;
-
-  if (loadedRecipeCount >= 100) {
-    if (!document.getElementById("limit-message")) {
-      container.innerHTML += `<a class="card-holder" id="limit-message">Limit reached</a>`
-    }
-    return
-  }
 
   try {
     loader.classList.add("display")
     spinner.classList.add("display-spinner")
 
     const response = await fetch(URLExtended)
+
+    if (!response.ok) {
+      const errorData = await response.json() // Parse error details
+      if (response.status === 402 || (errorData.message && errorData.message.toLowerCase().includes("quota"))) {
+        apiLimitReached = true // Set API limit flag
+        if (!document.getElementById("limit-message")) {
+          container.innerHTML += `<a class="card-holder" id="limit-message">API limit reached. Try again later.</a>`
+        }
+        loader.classList.remove("display")
+        spinner.classList.remove("display-spinner")
+        return
+      }
+      throw new Error(errorData.message || "Unknown API error")
+    }
+
     const { results = [] } = await response.json()
 
     loader.classList.remove("display")
     spinner.classList.remove("display-spinner")
-
-    if (!results.length) return console.log("No new recipes")
 
     let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || []
     let uniqueRecipes = [...new Map([...storedRecipes, ...results].map(r => [r.id, r])).values()]
@@ -176,7 +188,7 @@ const fetchData = async () => {
 
 
 
-function checkScroll() {
+const checkScroll = async () => {
   let storedRecipes = JSON.parse(localStorage.getItem("recipes")) || [] //call upon localStorage
 
   let selectedTime = timeMix.find(radio => radio.checked).value
@@ -186,17 +198,14 @@ function checkScroll() {
     checkMix.some(checkbox => checkbox.checked) || // Diet filters
     costMix.some(checkbox => checkbox.checked) || // Cost sorting
     (selectedTime && selectedTime !== "200") // Only block if time is selected & not "60-min"
-  //duplicate line?
 
 
   // Check if we've loaded all recipes from localStorage
   const displayedRecipes = container.querySelectorAll(".card-holder").length // Count how many are currently displayed
 
-  if (window.innerHeight + window.scrollY >= document.body.offsetHeight) { //only trigger when at the bottom of browser screen
-    console.log("Reached bottom!")
+  if (window.innerHeight + window.scrollY >= document.body.offsetHeight - 200) { //only trigger when at the bottom of browser screen - 200px
 
     if (isFiltered) {
-      console.log("Skipping fetch due to active filters/sorting.")
       if (!document.getElementById("sorting-enabled")) {
         container.innerHTML += `
         <a class="card-holder" id="sorting-enabled">
@@ -208,11 +217,9 @@ function checkScroll() {
     }
 
     if (displayedRecipes < storedRecipes.length) { //only fetch more if we haven't loaded all available
-      console.log("Loading more from storage...")
       loadRecipes(storedRecipes.slice(0, displayedRecipes + batchSize)) //load more recipes
     }
-    else {
-      console.log("Fetching new data...")
+    else if (!apiLimitReached) {
       fetchData()
     }
   }
